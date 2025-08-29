@@ -127,7 +127,7 @@
                 <div class="grid md:grid-cols-2 gap-8">
                     <div>
                         <h4 class="font-semibold text-lg mb-2">XML vs. DANFE</h4>
-                        <p class="text-gray-600 mb-4">É crucial entender a diferença: o **XML é o documento fiscal legal**, com validade jurídica, enquanto o **DANFE é apenas sua representação gráfica auxiliar** para o transporte e consulta rápida.</p>
+                        <p class="text-gray-600 mb-4">É crucial entender a diferença: o <strong> é o documento fiscal legal </strong>, com validade jurídica, enquanto o <strong>DANFE é apenas sua representação gráfica auxiliar</strong> para o transporte e consulta rápida.</p>
                         <div class="flex space-x-4">
                             <div class="flex-1 p-4 border rounded-lg bg-gray-50">
                                 <h5 class="font-bold">📄 XML</h5>
@@ -163,15 +163,15 @@
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="p-4 bg-gray-50 rounded-lg">
                         <h4 class="font-semibold">Dados do Emitente</h4>
-                        <p class="text-sm text-gray-600">CNPJ, Inscrição Estadual, Endereço e, o mais importante, o **Regime Tributário (CRT)** que define todas as regras de impostos.</p>
+                        <p class="text-sm text-gray-600">CNPJ, Inscrição Estadual, Endereço e, o mais importante, o <strong>Regime Tributário (CRT)</strong> que define todas as regras de impostos.</p>
                     </div>
                     <div class="p-4 bg-gray-50 rounded-lg">
                         <h4 class="font-semibold">Cadastro de Produtos</h4>
-                        <p class="text-sm text-gray-600">Cada produto deve ter seu código (SKU), GTIN (código de barras) e, crucialmente, o **NCM**.</p>
+                        <p class="text-sm text-gray-600">Cada produto deve ter seu código (SKU), GTIN (código de barras) e, crucialmente, o <strong>NCM</strong>.</p>
                     </div>
                     <div class="p-4 bg-gray-50 rounded-lg">
                         <h4 class="font-semibold">O Crítico NCM</h4>
-                        <p class="text-sm text-gray-600">A **Nomenclatura Comum do Mercosul** (8 dígitos) é a chave para a tributação. Ela define se há ICMS-ST, as alíquotas de PIS/COFINS e a carga tributária da Lei da Transparência.</p>
+                        <p class="text-sm text-gray-600">A <strong>Nomenclatura Comum do Mercosul</strong> (8 dígitos) é a chave para a tributação. Ela define se há ICMS-ST, as alíquotas de PIS/COFINS e a carga tributária da Lei da Transparência.</p>
                     </div>
                 </div>
             </section>
@@ -198,33 +198,33 @@
                         <div class="content-section active" data-crt="simples">
                             <div class="p-4 bg-blue-50 rounded-lg h-full">
                                 <h5 class="font-bold text-blue-800">CSOSN</h5>
-                                <p class="text-sm text-gray-700">Empresas do Simples Nacional usam o **CSOSN** (Código de Situação da Operação no Simples Nacional). O mais comum é o `102`, que indica que o imposto será pago na guia unificada (DAS).</p>
+                                <p class="text-sm text-gray-700">Empresas do Simples Nacional usam o <strong>CSOSN</strong> (Código de Situação da Operação no Simples Nacional). O mais comum é o <code>102</code>, que indica que o imposto será pago na guia unificada (DAS).</p>
                             </div>
                         </div>
                         <div class="content-section" data-crt="normal">
                             <div class="p-4 bg-green-50 rounded-lg h-full">
                                 <h5 class="font-bold text-green-800">CST</h5>
-                                <p class="text-sm text-gray-700">Empresas do Regime Normal usam o **CST** (Código de Situação Tributária). O mais comum é o `00 - Tributada integralmente`, que exige o cálculo e destaque do ICMS na nota.</p>
+                                <p class="text-sm text-gray-700">Empresas do Regime Normal usam o <strong>CST</strong> (Código de Situação Tributária). O mais comum é o <code>00 - Tributada integralmente</code>, que exige o cálculo e destaque do ICMS na nota.</p>
                             </div>
                         </div>
 
                         <div class="content-section active" data-crt="simples">
                              <div class="p-4 bg-gray-50 rounded-lg h-full">
                                 <h5 class="font-bold">ICMS</h5>
-                                <p class="text-sm text-gray-600">No Simples, o ICMS **não é destacado** na nota. O valor é recolhido mensalmente no DAS. Se o produto tiver **Substituição Tributária (ST)**, usa-se o CSOSN `500`.</p>
+                                <p class="text-sm text-gray-600">No Simples, o ICMS <strong>não é destacado</strong> na nota. O valor é recolhido mensalmente no DAS. Se o produto tiver <strong>Substituição Tributária (ST)</strong>, usa-se o CSOSN <code>500</code>.</p>
                             </div>
                         </div>
                          <div class="content-section" data-crt="normal">
                              <div class="p-4 bg-gray-50 rounded-lg h-full">
                                 <h5 class="font-bold">ICMS</h5>
-                                <p class="text-sm text-gray-600">No Regime Normal, o sistema deve calcular a Base de Cálculo (`vBC`), aplicar a Alíquota (`pICMS`) e informar o Valor do ICMS (`vICMS`) em cada item. Se houver **ST**, usa-se o CST `60`.</p>
+                                <p class="text-sm text-gray-600">No Regime Normal, o sistema deve calcular a Base de Cálculo (<code>vBC</code>), aplicar a Alíquota (<code>pICMS</code>) e informar o Valor do ICMS (<code>vICMS</code>) em cada item. Se houver <strong>ST</strong>, usa-se o CST <code>60</code>.</p>
                             </div>
                         </div>
 
                         <div class="col-span-1 md:col-span-2 lg:col-span-1">
                              <div class="p-4 bg-orange-50 rounded-lg h-full">
                                 <h5 class="font-bold text-orange-800">Pagamento & Integração</h5>
-                                <p class="text-sm text-gray-700">É obrigatório informar o meio de pagamento (PIX, Cartão, etc.). Para pagamentos eletrônicos, o sistema **deve** capturar o **código de autorização (`cAut`)** da transação e incluí-lo no XML. A não integração é uma inconformidade grave.</p>
+                                <p class="text-sm text-gray-700">É obrigatório informar o meio de pagamento (PIX, Cartão, etc.). Para pagamentos eletrônicos, o sistema <strong>deve</strong> capturar o <strong>código de autorização (<code>cAut</code>)</strong> da transação e incluí-lo no XML. A não integração é uma inconformidade grave.</p>
                             </div>
                         </div>
 
@@ -238,7 +238,7 @@
                 <div class="grid md:grid-cols-3 gap-6">
                     <div class="p-4 bg-gray-50 rounded-lg">
                         <h4 class="font-semibold">↩️ Devolução</h4>
-                        <p class="text-sm text-gray-600">O cliente devolveu o produto? Sua loja deve emitir uma **Nota Fiscal de Entrada**, com CFOP de devolução (ex: `1.202`) e referenciando a chave de acesso da nota de venda original.</p>
+                        <p class="text-sm text-gray-600">O cliente devolveu o produto? Sua loja deve emitir uma <strong>Nota Fiscal de Entrada</strong>, com CFOP de devolução (ex: <code>1.202</code>) e referenciando a chave de acesso da nota de venda original.</p>
                     </div>
                     <div class="p-4 bg-gray-50 rounded-lg">
                         <h4 class="font-semibold">🚫 Cancelamento</h4>
@@ -246,7 +246,7 @@
                     </div>
                     <div class="p-4 bg-gray-50 rounded-lg">
                         <h4 class="font-semibold">✏️ Carta de Correção (CC-e)</h4>
-                        <p class="text-sm text-gray-600">Para corrigir erros simples que **não alteram valores ou impostos** (ex: descrição do produto, dados do transporte). Não pode ser usada para corrigir preço ou quantidade.</p>
+                        <p class="text-sm text-gray-600">Para corrigir erros simples que <strong>não alteram valores ou impostos</strong> (ex: descrição do produto, dados do transporte). Não pode ser usada para corrigir preço ou quantidade.</p>
                     </div>
                 </div>
             </section>

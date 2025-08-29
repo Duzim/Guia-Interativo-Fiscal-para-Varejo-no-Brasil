@@ -25,3 +25,7 @@ A aplicação é um único ficheiro autónomo. Não é necessária qualquer inst
 ## Objetivo
 O principal objetivo deste projeto é demonstrar como os princípios de design de informação e UX (User Experience) podem ser aplicados para transformar um tópico notoriamente complexo e técnico num recurso educacional acessível e envolvente. A aplicação prova que, com a arquitetura de informação correta e interatividade direcionada, é possível facilitar significativamente a compreensão de temas difíceis.
 
+## Referencia
+
++ [1] [Campos Fiscais para Varejo Brasileiro](https://drive.google.com/file/d/1aFvUdnEOzhgHhEXRMoTbskM9XxWAhkA-/view?usp=sharing)
+
