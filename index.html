@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Interativo Fiscal para Varejo no Brasil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony (Beige, Dark Text, Teal, Orange) -->
+    <!-- Application Structure Plan: A task-oriented dashboard structure. Starts with a high-level interactive flow diagram (Cadastro -> Venda -> Pós-Venda) to provide a mental model. Content is grouped into thematic, collapsible sections (Foundations, Setup, Product, Sale, Post-Sale) for easy navigation, rather than mirroring the linear report. The core interaction is a 'Taxation Simulator' where users select their company's tax regime (CRT) to see only the relevant rules (CST vs. CSOSN), simplifying the most complex topic. This structure prioritizes user-driven exploration and reduces cognitive load compared to a linear document. -->
+    <!-- Visualization & Content Choices: 1. Fiscal Flow Diagram: Report Info -> Process Overview -> Goal: Organize -> Method: Interactive HTML/CSS diagram -> Interaction: Click to highlight stages. Justification: Provides an immediate structural overview. 2. Chave de Acesso Builder: Report Info -> Key Structure -> Goal: Inform -> Method: Interactive HTML elements -> Interaction: Hover to see component descriptions. Justification: Deconstructs a complex ID. 3. Interactive Taxation Module: Report Info -> CST vs CSOSN rules -> Goal: Compare/Inform -> Method: JS-driven content visibility -> Interaction: User selects company tax regime (CRT) to filter rules. Justification: Simplifies the most complex part of the report by showing only relevant information. No charts used as the source is qualitative. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F5F2;
+            color: #333333;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #4A90E2;
+            transform: translateY(-2px);
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+        .flow-step {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .flow-step.active {
+            background-color: #4A90E2;
+            color: white;
+            transform: scale(1.05);
+        }
+        .flow-arrow {
+            color: #9CA3AF;
+        }
+        .chave-part:hover .chave-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+        .chave-tooltip {
+            transition: opacity 0.3s;
+        }
+        .tab-button.active {
+            border-color: #4A90E2;
+            color: #4A90E2;
+            background-color: #EAF2FA;
+        }
+        .tax-option:checked + label {
+            background-color: #4A90E2;
+            color: white;
+            border-color: #4A90E2;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">Guia Fiscal Interativo para Varejo</h1>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#fundamentos" class="nav-link font-medium text-gray-600">Fundamentos</a>
+                    <a href="#configuracao" class="nav-link font-medium text-gray-600">Configuração</a>
+                    <a href="#venda" class="nav-link font-medium text-gray-600">A Venda</a>
+                    <a href="#pos-venda" class="nav-link font-medium text-gray-600">Pós-Venda</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        
+        <section id="introducao" class="text-center mb-12 md:mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800">Descomplicando a Legislação Fiscal Brasileira</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600">
+                Esta aplicação interativa traduz a complexa legislação fiscal do varejo brasileiro em um guia prático. Navegue pelo fluxo, explore os conceitos e entenda os campos essenciais para manter seu sistema em conformidade.
+            </p>
+        </section>
+
+        <section id="fluxo" class="mb-12 md:mb-16">
+            <h3 class="text-2xl font-bold text-center mb-8">O Fluxo Fiscal de Varejo</h3>
+            <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+                <div id="flow-cadastro" class="flow-step active p-4 rounded-lg border-2 border-gray-300 w-full md:w-1/4 text-center">
+                    <span class="text-2xl">①</span>
+                    <h4 class="font-semibold mt-2">Cadastro & Config.</h4>
+                </div>
+                <div class="flow-arrow text-3xl font-light transform md:-rotate-0 rotate-90">&rarr;</div>
+                <div id="flow-venda" class="flow-step p-4 rounded-lg border-2 border-gray-300 w-full md:w-1/4 text-center">
+                    <span class="text-2xl">②</span>
+                    <h4 class="font-semibold mt-2">A Venda</h4>
+                </div>
+                <div class="flow-arrow text-3xl font-light transform md:-rotate-0 rotate-90">&rarr;</div>
+                <div id="flow-posvenda" class="flow-step p-4 rounded-lg border-2 border-gray-300 w-full md:w-1/4 text-center">
+                    <span class="text-2xl">③</span>
+                    <h4 class="font-semibold mt-2">Pós-Venda</h4>
+                </div>
+            </div>
+            <div id="flow-description" class="mt-6 text-center text-gray-600 max-w-2xl mx-auto p-4 bg-white/50 rounded-lg">
+                <p>Tudo começa com a configuração correta da sua empresa e o cadastro detalhado dos produtos. Esta é a base para todos os cálculos fiscais.</p>
+            </div>
+        </section>
+
+        <div class="space-y-12 md:space-y-16">
+            
+            <section id="fundamentos" class="card p-6 md:p-8">
+                <h3 class="text-2xl font-bold mb-6">Fundamentos do Documento Fiscal Eletrônico</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-semibold text-lg mb-2">XML vs. DANFE</h4>
+                        <p class="text-gray-600 mb-4">É crucial entender a diferença: o **XML é o documento fiscal legal**, com validade jurídica, enquanto o **DANFE é apenas sua representação gráfica auxiliar** para o transporte e consulta rápida.</p>
+                        <div class="flex space-x-4">
+                            <div class="flex-1 p-4 border rounded-lg bg-gray-50">
+                                <h5 class="font-bold">📄 XML</h5>
+                                <p class="text-sm text-gray-600">O Documento Legal. Assinado digitalmente, transmitido à SEFAZ e armazenado por 5 anos.</p>
+                            </div>
+                            <div class="flex-1 p-4 border rounded-lg bg-gray-50">
+                                <h5 class="font-bold">🧾 DANFE</h5>
+                                <p class="text-sm text-gray-600">O Documento Auxiliar. Impresso, acompanha a mercadoria e contém a Chave de Acesso e QR Code.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-lg mb-2">A Chave de Acesso (44 dígitos)</h4>
+                        <p class="text-gray-600 mb-4">A identidade única de cada nota fiscal. Passe o mouse sobre as partes para entender sua composição.</p>
+                        <div class="text-xs md:text-sm font-mono p-3 bg-gray-100 rounded-lg flex flex-wrap break-all">
+                            <span class="chave-part relative"><span class="text-blue-600">52</span><span class="chave-tooltip opacity-0 visibility-hidden absolute bottom-full mb-2 w-32 p-2 text-xs text-white bg-gray-800 rounded-md">cUF (UF)</span></span>
+                            <span class="chave-part relative"><span class="text-red-600">2508</span><span class="chave-tooltip opacity-0 visibility-hidden absolute bottom-full mb-2 w-32 p-2 text-xs text-white bg-gray-800 rounded-md">AAMM (Ano/Mês)</span></span>
+                            <span class="chave-part relative"><span class="text-green-600">12345678000199</span><span class="chave-tooltip opacity-0 visibility-hidden absolute bottom-full mb-2 w-32 p-2 text-xs text-white bg-gray-800 rounded-md">CNPJ</span></span>
+                            <span class="chave-part relative"><span class="text-purple-600">65</span><span class="chave-tooltip opacity-0 visibility-hidden absolute bottom-full mb-2 w-32 p-2 text-xs text-white bg-gray-800 rounded-md">mod (Modelo)</span></span>
+                            <span class="chave-part relative"><span class="text-orange-600">001</span><span class="chave-tooltip opacity-0 visibility-hidden absolute bottom-full mb-2 w-32 p-2 text-xs text-white bg-gray-800 rounded-md">serie</span></span>
+                            <span class="chave-part relative"><span class="text-indigo-600">000012345</span><span class="chave-tooltip opacity-0 visibility-hidden absolute bottom-full mb-2 w-32 p-2 text-xs text-white bg-gray-800 rounded-md">nNF (Número)</span></span>
+                            <span class="chave-part relative"><span class="text-teal-600">1</span><span class="chave-tooltip opacity-0 visibility-hidden absolute bottom-full mb-2 w-32 p-2 text-xs text-white bg-gray-800 rounded-md">tpEmis (Emissão)</span></span>
+                            <span class="chave-part relative"><span class="text-pink-600">12345678</span><span class="chave-tooltip opacity-0 visibility-hidden absolute bottom-full mb-2 w-32 p-2 text-xs text-white bg-gray-800 rounded-md">cNF (Cód. Num.)</span></span>
+                            <span class="chave-part relative"><span class="text-gray-600">9</span><span class="chave-tooltip opacity-0 visibility-hidden absolute bottom-full mb-2 w-32 p-2 text-xs text-white bg-gray-800 rounded-md">cDV (Díg. Verif.)</span></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="configuracao" class="card p-6 md:p-8">
+                <h3 class="text-2xl font-bold mb-6">Configuração Inicial do Sistema</h3>
+                <p class="text-gray-600 mb-6 max-w-4xl">Antes da primeira venda, seu sistema precisa armazenar os dados fundamentais da sua empresa e do produto. Um erro aqui pode invalidar todas as notas fiscais emitidas.</p>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-semibold">Dados do Emitente</h4>
+                        <p class="text-sm text-gray-600">CNPJ, Inscrição Estadual, Endereço e, o mais importante, o **Regime Tributário (CRT)** que define todas as regras de impostos.</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-semibold">Cadastro de Produtos</h4>
+                        <p class="text-sm text-gray-600">Cada produto deve ter seu código (SKU), GTIN (código de barras) e, crucialmente, o **NCM**.</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-semibold">O Crítico NCM</h4>
+                        <p class="text-sm text-gray-600">A **Nomenclatura Comum do Mercosul** (8 dígitos) é a chave para a tributação. Ela define se há ICMS-ST, as alíquotas de PIS/COFINS e a carga tributária da Lei da Transparência.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="venda" class="card p-6 md:p-8">
+                <h3 class="text-2xl font-bold mb-2">A Venda: O Coração da Operação Fiscal</h3>
+                <p class="text-gray-600 mb-6 max-w-4xl">No momento da venda, o sistema combina os dados da empresa e do produto para calcular os impostos. A interatividade abaixo demonstra como o Regime Tributário da sua empresa muda tudo.</p>
+                
+                <div class="mb-8">
+                    <h4 class="font-semibold text-lg mb-3">1. Selecione o Regime Tributário da sua empresa:</h4>
+                    <div class="flex space-x-4">
+                        <input type="radio" id="crt-simples" name="crt" value="simples" class="hidden tax-option" checked>
+                        <label for="crt-simples" class="flex-1 text-center p-3 rounded-md border-2 cursor-pointer transition-all">Simples Nacional</label>
+                        
+                        <input type="radio" id="crt-normal" name="crt" value="normal" class="hidden tax-option">
+                        <label for="crt-normal" class="flex-1 text-center p-3 rounded-md border-2 cursor-pointer transition-all">Regime Normal</label>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">2. Entenda os Códigos e Impostos Aplicáveis:</h4>
+                    <div id="tax-info-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        
+                        <div class="content-section active" data-crt="simples">
+                            <div class="p-4 bg-blue-50 rounded-lg h-full">
+                                <h5 class="font-bold text-blue-800">CSOSN</h5>
+                                <p class="text-sm text-gray-700">Empresas do Simples Nacional usam o **CSOSN** (Código de Situação da Operação no Simples Nacional). O mais comum é o `102`, que indica que o imposto será pago na guia unificada (DAS).</p>
+                            </div>
+                        </div>
+                        <div class="content-section" data-crt="normal">
+                            <div class="p-4 bg-green-50 rounded-lg h-full">
+                                <h5 class="font-bold text-green-800">CST</h5>
+                                <p class="text-sm text-gray-700">Empresas do Regime Normal usam o **CST** (Código de Situação Tributária). O mais comum é o `00 - Tributada integralmente`, que exige o cálculo e destaque do ICMS na nota.</p>
+                            </div>
+                        </div>
+
+                        <div class="content-section active" data-crt="simples">
+                             <div class="p-4 bg-gray-50 rounded-lg h-full">
+                                <h5 class="font-bold">ICMS</h5>
+                                <p class="text-sm text-gray-600">No Simples, o ICMS **não é destacado** na nota. O valor é recolhido mensalmente no DAS. Se o produto tiver **Substituição Tributária (ST)**, usa-se o CSOSN `500`.</p>
+                            </div>
+                        </div>
+                         <div class="content-section" data-crt="normal">
+                             <div class="p-4 bg-gray-50 rounded-lg h-full">
+                                <h5 class="font-bold">ICMS</h5>
+                                <p class="text-sm text-gray-600">No Regime Normal, o sistema deve calcular a Base de Cálculo (`vBC`), aplicar a Alíquota (`pICMS`) e informar o Valor do ICMS (`vICMS`) em cada item. Se houver **ST**, usa-se o CST `60`.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-span-1 md:col-span-2 lg:col-span-1">
+                             <div class="p-4 bg-orange-50 rounded-lg h-full">
+                                <h5 class="font-bold text-orange-800">Pagamento & Integração</h5>
+                                <p class="text-sm text-gray-700">É obrigatório informar o meio de pagamento (PIX, Cartão, etc.). Para pagamentos eletrônicos, o sistema **deve** capturar o **código de autorização (`cAut`)** da transação e incluí-lo no XML. A não integração é uma inconformidade grave.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <section id="pos-venda" class="card p-6 md:p-8">
+                <h3 class="text-2xl font-bold mb-6">Pós-Venda: Corrigindo, Cancelando e Devolvendo</h3>
+                <p class="text-gray-600 mb-6 max-w-4xl">A operação não termina na emissão. O sistema precisa estar preparado para lidar com os eventos que ocorrem após a venda, cada um com seu processo fiscal específico.</p>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-semibold">↩️ Devolução</h4>
+                        <p class="text-sm text-gray-600">O cliente devolveu o produto? Sua loja deve emitir uma **Nota Fiscal de Entrada**, com CFOP de devolução (ex: `1.202`) e referenciando a chave de acesso da nota de venda original.</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-semibold">🚫 Cancelamento</h4>
+                        <p class="text-sm text-gray-600">É possível cancelar uma nota, mas o prazo é curto (geralmente 24h para NF-e, e minutos para NFC-e) e só é permitido se a mercadoria não circulou.</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-semibold">✏️ Carta de Correção (CC-e)</h4>
+                        <p class="text-sm text-gray-600">Para corrigir erros simples que **não alteram valores ou impostos** (ex: descrição do produto, dados do transporte). Não pode ser usada para corrigir preço ou quantidade.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-white mt-12 md:mt-16 border-t">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-gray-500">
+            <p>&copy; 2025 Guia Fiscal Interativo. Simplificando a conformidade para o varejo brasileiro.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flowSteps = document.querySelectorAll('.flow-step');
+            const flowDescription = document.getElementById('flow-description');
+            
+            const descriptions = {
+                'flow-cadastro': 'Tudo começa com a configuração correta da sua empresa e o cadastro detalhado dos produtos. Esta é a base para todos os cálculos fiscais.',
+                'flow-venda': 'No momento da venda, o sistema combina os dados cadastrados para calcular os impostos, gerar o XML e transmitir para a SEFAZ.',
+                'flow-posvenda': 'Após a venda, o sistema deve ser capaz de gerenciar devoluções, cancelamentos e correções, cada um com seu processo fiscal específico.'
+            };
+
+            flowSteps.forEach(step => {
+                step.addEventListener('click', () => {
+                    flowSteps.forEach(s => s.classList.remove('active'));
+                    step.classList.add('active');
+                    flowDescription.innerHTML = `<p>${descriptions[step.id]}</p>`;
+                });
+            });
+
+            const crtRadios = document.querySelectorAll('input[name="crt"]');
+            const taxInfoSections = document.querySelectorAll('#tax-info-container .content-section');
+
+            crtRadios.forEach(radio => {
+                radio.addEventListener('change', (event) => {
+                    const selectedCrt = event.target.value;
+                    taxInfoSections.forEach(section => {
+                        if (section.dataset.crt === selectedCrt) {
+                            section.classList.add('active');
+                        } else {
+                            section.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 80) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
